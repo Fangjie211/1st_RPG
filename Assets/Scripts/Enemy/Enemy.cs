@@ -46,6 +46,16 @@ public class Enemy : Entity
         counterImage.SetActive(true);
     }
     
+
+    public virtual bool CanBeStunned()
+    {
+        if (canBeStunned)
+        {
+            CloseCounterAttackWindow();
+            return true;
+        }
+        return false;
+    }
     public virtual void CloseCounterAttackWindow()
     {
         canBeStunned=false;

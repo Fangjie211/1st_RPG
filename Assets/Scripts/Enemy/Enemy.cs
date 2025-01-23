@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class Enemy : Entity
@@ -9,6 +10,8 @@ public class Enemy : Entity
     [Header("Stunned info")]
     public float stunDuration;
     public Vector2 stunDirection;
+    protected bool canBeStunned;
+    [SerializeField] protected GameObject counterImage;
     
     [Header("Move info")]
     public float moveSpeed;
@@ -36,6 +39,19 @@ public class Enemy : Entity
         base.Update();
         stateMachine.currentState.Update();
     }
+
+    public virtual void OpenCounterAttackWindow()
+    {
+        canBeStunned = true;
+        counterImage.SetActive(true);
+    }
+    
+    public virtual void CloseCounterAttackWindow()
+    {
+        canBeStunned=false;
+        counterImage.SetActive(false);
+    }
+
     public virtual void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishTrigger();
     protected override void OnDrawGizmos()
     {

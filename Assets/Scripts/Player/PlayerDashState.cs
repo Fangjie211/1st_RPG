@@ -12,6 +12,7 @@ public class PlayerDashState :PlayerState
     public override void Enter()
     {
         base.Enter();
+        SkillManager.instance.clone.CreateClone(player.transform);
         enemy = GameObject.Find("Enemy_skeleton").transform;
         stateTimer = player.dashDuration;
         Physics2D.IgnoreCollision(player.GetComponent<Collider2D>(),enemy.GetComponent<Collider2D>());

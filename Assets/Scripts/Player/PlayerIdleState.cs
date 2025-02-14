@@ -22,6 +22,7 @@ public class PlayerIdleState : PlayerGroundedState
     public override void Update()
     {
         base.Update();
+        rb.velocity=new Vector2(0,rb.velocity.y);
         if (xInput != 0)
         {
             stateMachine.ChangeState(player.moveState);

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerDashState :PlayerState
@@ -13,16 +14,30 @@ public class PlayerDashState :PlayerState
     {
         base.Enter();
         SkillManager.instance.clone.CreateClone(player.transform);
-        enemy = GameObject.Find("Enemy_skeleton").transform;
+        
         stateTimer = player.dashDuration;
-        Physics2D.IgnoreCollision(player.GetComponent<Collider2D>(),enemy.GetComponent<Collider2D>());
+        IgnoreEnemyCollision(true);
+        
     }
 
     public override void Exit()
     {
         rb.velocity=new Vector2(0,rb.velocity.y);
         base.Exit();
-        Physics2D.IgnoreCollision(player.GetComponent<Collider2D>(), enemy.GetComponent<Collider2D>(),false);
+        IgnoreEnemyCollision(false);
+    }
+    private void IgnoreEnemyCollision(bool ignore)
+    {
+        Collider2D playerCollider = rb.GetComponent<Collider2D>();
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy"); // 先确保敌人有 "Enemy" 标签
+        foreach (GameObject enemy in enemies)
+        {
+            Collider2D enemyCollider = enemy.GetComponent<Collider2D>();
+            if (enemyCollider != null)
+            {
+                Physics2D.IgnoreCollision(playerCollider, enemyCollider, ignore);
+            }
+        }
     }
 
     public override void Update()

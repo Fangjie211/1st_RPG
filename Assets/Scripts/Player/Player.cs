@@ -76,10 +76,7 @@ public class Player : Entity
     }
 
 
-    public void ExitBlackHoleState()
-    {
-        stateMachine.ChangeState(airState);
-    }
+ 
     protected override void Start()
     {
         base.Start();

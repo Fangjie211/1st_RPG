@@ -13,7 +13,7 @@ public class PlayerDashState :PlayerState
     public override void Enter()
     {
         base.Enter();
-        SkillManager.instance.clone.CreateClone(player.transform);
+        SkillManager.instance.clone.CreateClone(player.transform,Vector3.zero);
         
         stateTimer = player.dashDuration;
         IgnoreEnemyCollision(true);

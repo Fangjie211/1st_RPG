@@ -98,6 +98,7 @@
     <Compile Include="Assets\Scripts\Skill\Skill.cs" />
     <Compile Include="Assets\Scripts\ParallaxBackground.cs" />
     <Compile Include="Assets\Scripts\Skill\Sword_Skill.cs" />
+    <Compile Include="Assets\Scripts\Skill\SkillController\BlackHole_Skill_Controller.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

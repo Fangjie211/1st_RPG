@@ -13,10 +13,11 @@ public enum SwordType
 public class Sword_Skill : Skill
 {
     public SwordType swordType=SwordType.Regular;
-
+    [SerializeField] private float returnSpeed;
     [Header("Bounce info")]
     [SerializeField] private int bounceAmount;
     [SerializeField]private float bounceGravity;
+    [SerializeField] private float bounceSpeed;
 
     [Header("Pierce info")]
     [SerializeField] private int pierceAmount;
@@ -34,7 +35,7 @@ public class Sword_Skill : Skill
     [SerializeField] private float hitCooldown = .35f;
 
     private Vector2 finalDir;
-
+    [SerializeField] private float freezeTimeDuration;
     [Header("Aim dots")]
     [SerializeField] private int numberOfDots;
     [SerializeField] private float spaceBetweenDots;
@@ -82,7 +83,7 @@ public class Sword_Skill : Skill
 
         if (swordType == SwordType.Bounce)
         {
-            newSwordScript.SetupBounce(true, bounceAmount);
+            newSwordScript.SetupBounce(true, bounceAmount,bounceSpeed);
         }
         if (swordType == SwordType.Pierce)
         {
@@ -92,7 +93,7 @@ public class Sword_Skill : Skill
         {
             newSwordScript.SetupSpin(true, maxTravelDistance, spinDuration,hitCooldown);
         }
-        newSwordScript.SetupSword(finalDir, swordGravity, player);
+        newSwordScript.SetupSword(finalDir, swordGravity, player,freezeTimeDuration,returnSpeed);
         player.AssignNewSword(newSword);
         DotsActive(false);
     }

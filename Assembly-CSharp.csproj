@@ -87,7 +87,9 @@
     <Compile Include="Assets\Scripts\Enemy\Skeleton\SkeletonBattleState.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyStateMachine.cs" />
     <Compile Include="Assets\Scripts\Skill\Blackhole_Skill.cs" />
+    <Compile Include="Assets\Scripts\Skill\Crystal_Skill.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMoveState.cs" />
+    <Compile Include="Assets\Scripts\Skill\SkillController\Crystal_Skill_Controller.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerPrimaryAttack.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAnimationTriggers.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\SkeletonIdleState.cs" />

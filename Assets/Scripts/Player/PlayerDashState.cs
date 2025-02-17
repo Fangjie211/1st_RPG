@@ -13,8 +13,8 @@ public class PlayerDashState :PlayerState
     public override void Enter()
     {
         base.Enter();
-        SkillManager.instance.clone.CreateClone(player.transform,Vector3.zero);
-        
+        //SkillManager.instance.clone.CreateClone(player.transform,Vector3.zero);
+        player.skill.clone.CreateCloneOnDashStart();
         stateTimer = player.dashDuration;
         IgnoreEnemyCollision(true);
         
@@ -22,6 +22,7 @@ public class PlayerDashState :PlayerState
 
     public override void Exit()
     {
+        player.skill.clone.CreateCloneOnDashOver();
         rb.velocity=new Vector2(0,rb.velocity.y);
         base.Exit();
         IgnoreEnemyCollision(false);

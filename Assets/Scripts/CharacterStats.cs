@@ -38,6 +38,7 @@ public class CharacterStats : MonoBehaviour
     protected virtual void Start()
     {
         currentHealth = maxHp.GetValue();
+        Debug.Log(fireDamage.GetValue());
     }
 
     public virtual void DoMagicDamage(CharacterStats _targetStats)
@@ -101,6 +102,8 @@ public class CharacterStats : MonoBehaviour
         }
 
         int totalDamage = damage.GetValue() + strength.GetValue();
+        Debug.Log("damage" + damage.GetValue());
+        Debug.Log("hp"+maxHp.GetValue());
         if (CanCrit())
         {
             CalculateCritialDamage(totalDamage);

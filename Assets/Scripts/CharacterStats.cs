@@ -27,30 +27,69 @@ public class CharacterStats : MonoBehaviour
     public bool isIgnited;
     public bool isChilled;
     public bool isShocked;
+    [SerializeField]private float ignitedTimer;
+    private float chilledTimer;
+    private float shockedTimer;
+
+    private float igniteDamageCooldown = .3f;
+    private float igniteDamageTimer;
+
+    private int igniteDamage;
 
     [Header("Offensive Stats")]
     public Stat damage;
     public Stat critChance;
     public Stat critPower;
     
-    [SerializeField] private int currentHealth;
+    public int currentHealth;
+    public System.Action OnHealthChanged;
     // Start is called before the first frame update
     protected virtual void Start()
     {
-        currentHealth = maxHp.GetValue();
-        Debug.Log(fireDamage.GetValue());
+        currentHealth = GetMaxHealth();
     }
+    protected virtual void Update()
+    {
+        igniteDamageTimer -= Time.deltaTime;
+        ignitedTimer -= Time.deltaTime;
+        chilledTimer -= Time.deltaTime;
+        shockedTimer -= Time.deltaTime;
 
+        if (ignitedTimer < 0)
+        {
+            isIgnited = false;
+        }
+        if(chilledTimer < 0)
+        {
+            isChilled = false;
+        }
+        if (shockedTimer < 0)
+        {
+            isShocked = false;
+        }
+        if (igniteDamageTimer < 0&&isIgnited)
+        {
+
+            DecreaseHealthBy(igniteDamage);
+            if(currentHealth < 0)
+            {
+                Die();
+            }
+
+            igniteDamageTimer = igniteDamageCooldown;
+        }
+    }
+    public void SetupIgniteDamage(int damage) => igniteDamage = damage;
     public virtual void DoMagicDamage(CharacterStats _targetStats)
     {
         int _fireDamage=fireDamage.GetValue();
         int _iceDamage=iceDamage.GetValue();
         int _lightningDamage=lightningDamage.GetValue();
-        Debug.Log(_fireDamage);
         int totalMagicDamage=_fireDamage+_iceDamage+_lightningDamage+intelligence.GetValue();
+
+
         totalMagicDamage-=_targetStats.magicResistance.GetValue()+_targetStats.intelligence.GetValue();
         totalMagicDamage=Mathf.Clamp(totalMagicDamage, 0, int.MaxValue);
-        Debug.Log(totalMagicDamage);
         _targetStats.TakeDamage(totalMagicDamage);
 
         bool canApplyIgnite = _fireDamage > _iceDamage && _fireDamage > _lightningDamage;
@@ -83,27 +122,41 @@ public class CharacterStats : MonoBehaviour
                 Debug.Log("Applied lighting");
             }
         }
+        if (canApplyIgnite) {
+            _targetStats.SetupIgniteDamage(Mathf.RoundToInt(fireDamage.GetValue()));
+        }
+        _targetStats.ApplyAilments(canApplyIgnite,canApplyChill, canApplyShock);
     }
     public void ApplyAilments(bool _ignite,bool _chill,bool _shock)
     {
-        if (isChilled|| isChilled || isShocked)
+        if (isIgnited|| isChilled || isShocked)
         {
             return;
         }
-        isIgnited = _ignite;
-        isChilled = _chill;
-        isShocked = _shock;
+        if (_ignite)
+        {
+            isIgnited = _ignite;
+            ignitedTimer = 4;
+        }
+        if (_chill)
+        {
+            isChilled = _chill;
+            chilledTimer = 4;
+        }
+        if (_shock)
+        {
+            isShocked = _shock;
+            shockedTimer = 4; 
+        }
     }
     public void DoDamage(CharacterStats _targetStats)
     {
-        if (CanEvade(_targetStats))
+        if (TargetCanEvade(_targetStats))
         {
             return;
         }
 
         int totalDamage = damage.GetValue() + strength.GetValue();
-        Debug.Log("damage" + damage.GetValue());
-        Debug.Log("hp"+maxHp.GetValue());
         if (CanCrit())
         {
             CalculateCritialDamage(totalDamage);
@@ -111,20 +164,30 @@ public class CharacterStats : MonoBehaviour
         totalDamage = CheckTargetArmor(_targetStats, totalDamage);
         _targetStats.TakeDamage(totalDamage);
         DoMagicDamage(_targetStats);
-        Debug.Log(totalDamage);
     }
 
     private int CheckTargetArmor(CharacterStats _targetStats, int totalDamage)
     {
-        totalDamage -= _targetStats.armor.GetValue();
+
+        if (_targetStats.isChilled)
+        {
+            totalDamage-=Mathf.RoundToInt(_targetStats.armor.GetValue()*.8f);
+        }
+        else
+        {
+            totalDamage-= _targetStats.armor.GetValue();
+        }
         totalDamage = Mathf.Clamp(totalDamage, 0, int.MaxValue);
         return totalDamage;
     }
 
-    private bool CanEvade(CharacterStats _targetStats)
+    private bool TargetCanEvade(CharacterStats _targetStats)
     {
         int totalEvasion = _targetStats.evasion.GetValue();
-
+        if (isShocked)
+        {
+            totalEvasion += 20;
+        }
         if (Random.Range(0, 100) < totalEvasion)
         {
             return true;
@@ -149,10 +212,18 @@ public class CharacterStats : MonoBehaviour
 
     public virtual void TakeDamage(int _damage)
     {
-        currentHealth -= _damage;
+        DecreaseHealthBy(_damage);
         if (currentHealth < 0)
         {
             Die();
+        }
+    }
+    protected virtual void DecreaseHealthBy(int _damage)
+    {
+        currentHealth-= _damage;
+        if(OnHealthChanged != null)
+        {
+            OnHealthChanged();
         }
     }
 
@@ -160,5 +231,10 @@ public class CharacterStats : MonoBehaviour
     {
 
     }
+    public virtual int GetMaxHealth()
+    {
+        return maxHp.GetValue()+vitality.GetValue()*5;
+    }
+
 }
 

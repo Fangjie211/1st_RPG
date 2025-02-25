@@ -20,7 +20,7 @@ public class Entity : MonoBehaviour
     public int facingDir { get; private set; } = 1;
     private bool facingRight = true;
 
-
+    public System.Action onFlipped;
 
     #region Components
     public Animator anim { get; private set; }
@@ -90,6 +90,10 @@ public class Entity : MonoBehaviour
         facingDir = facingDir * -1;
         facingRight = !facingRight;
         transform.Rotate(0, 180, 0);
+        if (onFlipped != null)
+        {
+            onFlipped();
+        }
     }
     public virtual void FlipController(float _x)
     {

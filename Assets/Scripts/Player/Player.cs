@@ -39,6 +39,8 @@ public class Player : Entity
     public PlayerCatchSwordState catchSword { get; private set; }
     public PlayerBlackHoleState blackHole { get; private set; }
 
+    public PlayerDeadState deadState { get; private set; }
+
     public SkillManager skill {  get; private set; }
     #endregion
     protected override void Awake()
@@ -53,7 +55,7 @@ public class Player : Entity
         dashState = new PlayerDashState(this, stateMachine, "Dash");
         wallSlide = new PlayerWallSlideState(this, stateMachine, "WallSlide");
         wallJump = new PlayerWallJumpState(this, stateMachine, "Jump");
-
+        deadState = new PlayerDeadState(this, stateMachine, "Die");
         primaryAttack = new PlayerPrimaryAttack(this, stateMachine, "Attack");
         counterAttack = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");
 
@@ -110,6 +112,10 @@ public class Player : Entity
             stateMachine.ChangeState(dashState);
         }
     }
-  
+    public override void Die()
+    {
+        base.Die();
+        stateMachine.ChangeState(deadState);
+    }
 
 }

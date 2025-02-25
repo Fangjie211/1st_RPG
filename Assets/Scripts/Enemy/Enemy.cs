@@ -23,13 +23,18 @@ public class Enemy : Entity
     public float attackCooldown;
     [HideInInspector] public float lastTimeAttacked;
     public EnemyStateMachine stateMachine {  get; private set; }
+    public string LastAnimBoolName { get; private set; }
     protected override void Awake()
     {
         base.Awake();
         stateMachine=new EnemyStateMachine();
         defaultMoveSpeed = moveSpeed;
     }
-
+    
+    public virtual void AssignLastAnimBoolName(string _assignString)
+    {
+        LastAnimBoolName= _assignString;
+    }
     protected override void Start()
     {
         base.Start();

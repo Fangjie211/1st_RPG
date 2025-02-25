@@ -17,6 +17,16 @@ public class CharacterStats : MonoBehaviour
     public Stat maxHp;
     public Stat armor;
     public Stat evasion;
+    public Stat magicResistance;
+
+    [Header("Magic Stats")]
+    public Stat fireDamage;
+    public Stat iceDamage;
+    public Stat lightningDamage;
+
+    public bool isIgnited;
+    public bool isChilled;
+    public bool isShocked;
 
     [Header("Offensive Stats")]
     public Stat damage;
@@ -30,7 +40,59 @@ public class CharacterStats : MonoBehaviour
         currentHealth = maxHp.GetValue();
     }
 
+    public virtual void DoMagicDamage(CharacterStats _targetStats)
+    {
+        int _fireDamage=fireDamage.GetValue();
+        int _iceDamage=iceDamage.GetValue();
+        int _lightningDamage=lightningDamage.GetValue();
+        Debug.Log(_fireDamage);
+        int totalMagicDamage=_fireDamage+_iceDamage+_lightningDamage+intelligence.GetValue();
+        totalMagicDamage-=_targetStats.magicResistance.GetValue()+_targetStats.intelligence.GetValue();
+        totalMagicDamage=Mathf.Clamp(totalMagicDamage, 0, int.MaxValue);
+        Debug.Log(totalMagicDamage);
+        _targetStats.TakeDamage(totalMagicDamage);
 
+        bool canApplyIgnite = _fireDamage > _iceDamage && _fireDamage > _lightningDamage;
+        bool canApplyChill = _iceDamage > _fireDamage && _iceDamage > _lightningDamage;
+        bool canApplyShock = _lightningDamage > _fireDamage && _lightningDamage > _iceDamage;
+
+        if (Mathf.Max(_iceDamage, _fireDamage, _lightningDamage) <= 0)
+        {
+            return;
+        }
+
+        while (!canApplyIgnite && !canApplyChill && !canApplyShock)
+        {
+            if(Random.value<.3f&&_fireDamage > 0)
+            {
+                canApplyIgnite=true;
+                _targetStats.ApplyAilments(canApplyIgnite, canApplyChill, canApplyChill);
+                Debug.Log("Applied fire");
+            }
+            if (Random.value < .3f && _iceDamage > 0)
+            {
+                canApplyChill = true;
+                _targetStats.ApplyAilments(canApplyIgnite, canApplyChill, canApplyChill);
+                Debug.Log("Applied ice");
+            }
+            if (Random.value < .3f && _lightningDamage > 0)
+            {
+                canApplyShock = true;
+                _targetStats.ApplyAilments(canApplyIgnite, canApplyChill, canApplyChill);
+                Debug.Log("Applied lighting");
+            }
+        }
+    }
+    public void ApplyAilments(bool _ignite,bool _chill,bool _shock)
+    {
+        if (isChilled|| isChilled || isShocked)
+        {
+            return;
+        }
+        isIgnited = _ignite;
+        isChilled = _chill;
+        isShocked = _shock;
+    }
     public void DoDamage(CharacterStats _targetStats)
     {
         if (CanEvade(_targetStats))
@@ -45,6 +107,8 @@ public class CharacterStats : MonoBehaviour
         }
         totalDamage = CheckTargetArmor(_targetStats, totalDamage);
         _targetStats.TakeDamage(totalDamage);
+        DoMagicDamage(_targetStats);
+        Debug.Log(totalDamage);
     }
 
     private int CheckTargetArmor(CharacterStats _targetStats, int totalDamage)

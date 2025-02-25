@@ -35,7 +35,7 @@ public class Clone_Skill_Controller : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void SetupClone(Transform _newTransform, float _cloneDuration, float _colorLosingSpeed, bool _canAttack, Vector3 _offset, Transform _closestEnemy,bool _canDuplicate,float _chanceToDuplicate)
+    public void SetupClone(Transform _newTransform, float _cloneDuration, float _colorLosingSpeed, bool _canAttack, Vector3 _offset, Transform _closestEnemy,bool _canDuplicate,float _chanceToDuplicate,int _OriginFacingDir)
     {
         if (_canAttack)
         {
@@ -45,7 +45,7 @@ public class Clone_Skill_Controller : MonoBehaviour
         cloneTimer = _cloneDuration;
         colorLosingSpeed = _colorLosingSpeed;
         closestEnemy = _closestEnemy;
-        FaceClosestTarget();
+        FaceClosestTarget(_OriginFacingDir);
         canDuplicate = _canDuplicate;
         chanceToDuplicate = _chanceToDuplicate;
     }
@@ -72,7 +72,7 @@ public class Clone_Skill_Controller : MonoBehaviour
             }
         }
     }
-    private void FaceClosestTarget()
+    private void FaceClosestTarget(int originFacing)
     {
         if (closestEnemy != null)
         {
@@ -81,6 +81,12 @@ public class Clone_Skill_Controller : MonoBehaviour
                 facingDir = -1;
                 transform.Rotate(0, 180, 0);
             }
+        }
+        else
+        {
+            Debug.Log("ddd");
+            if (originFacing == 1) { return; }
+            else { transform.Rotate(0, 180, 0); }
         }
     }
 }

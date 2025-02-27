@@ -47,6 +47,7 @@ public class Skill : MonoBehaviour
                 float distanceToEnemy = Vector2.Distance(_checkTransform.position, hit.transform.position);
                 if (distanceToEnemy < closestDistance)
                 {
+                    closestDistance = distanceToEnemy;
                     closestEnemy = hit.transform;
                 }
             }

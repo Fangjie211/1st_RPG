@@ -9,6 +9,8 @@ public class Crystal_Skill_Controller : MonoBehaviour
     private CircleCollider2D cd=>GetComponent<CircleCollider2D>();
 
 
+    private Player player;
+
     private bool canExplode;
     private bool canMove;
     private float moveSpeed;
@@ -16,7 +18,7 @@ public class Crystal_Skill_Controller : MonoBehaviour
     private float growSpeed;
     private Transform closestEnemy;
     [SerializeField] private LayerMask WhatIsEnemy;
-    public void SetupCrystal(float _crystalDuration,bool _canExplode,bool _canMove,float _moveSpeed,float _growSpeed,Transform _closestEnemy)
+    public void SetupCrystal(float _crystalDuration,bool _canExplode,bool _canMove,float _moveSpeed,float _growSpeed,Transform _closestEnemy,Player _player)
     {
         crystalExistTimer = _crystalDuration;
         canExplode = _canExplode;
@@ -24,6 +26,7 @@ public class Crystal_Skill_Controller : MonoBehaviour
         moveSpeed = _moveSpeed;
         growSpeed = _growSpeed;
         closestEnemy = _closestEnemy;
+        player = _player;
     }
     public void ChooseRandomEnemy()
     {
@@ -44,7 +47,7 @@ public class Crystal_Skill_Controller : MonoBehaviour
         {
             transform.position = Vector2.MoveTowards(transform.position, closestEnemy.position, moveSpeed * Time.deltaTime);
         
-            if(Vector2.Distance(transform.position, closestEnemy.position) < 1)
+            if(Vector2.Distance(transform.position, closestEnemy.position) < .1f)
             {
                 FinishCrystal();
                 canMove=false;
@@ -73,7 +76,7 @@ public class Crystal_Skill_Controller : MonoBehaviour
         foreach (var hit in colliders)
         {
             if (hit.GetComponent<Enemy>() != null)
-                hit.GetComponent<Enemy>().DamageEffect();
+                player.stats.DoMagicDamage(hit.GetComponent<CharacterStats>());
         }
     }
 

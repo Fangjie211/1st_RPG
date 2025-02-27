@@ -3,7 +3,7 @@ using UnityEngine;
 public class Clone_Skill_Controller : MonoBehaviour
 {
 
-
+    private Player player;
 
     private Transform closestEnemy;
     private SpriteRenderer sr;
@@ -35,12 +35,13 @@ public class Clone_Skill_Controller : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void SetupClone(Transform _newTransform, float _cloneDuration, float _colorLosingSpeed, bool _canAttack, Vector3 _offset, Transform _closestEnemy,bool _canDuplicate,float _chanceToDuplicate,int _OriginFacingDir)
+    public void SetupClone(Transform _newTransform, float _cloneDuration, float _colorLosingSpeed, bool _canAttack, Vector3 _offset, Transform _closestEnemy,bool _canDuplicate,float _chanceToDuplicate,int _OriginFacingDir,Player _player)
     {
         if (_canAttack)
         {
             anim.SetInteger("AttackNumber", Random.Range(1, 4));
         }
+        player= _player;
         transform.position = _newTransform.position + _offset;
         cloneTimer = _cloneDuration;
         colorLosingSpeed = _colorLosingSpeed;
@@ -60,7 +61,7 @@ public class Clone_Skill_Controller : MonoBehaviour
         foreach (var hit in colliders)
         {
             if (hit.GetComponent<Enemy>() != null){
-                hit.GetComponent<Enemy>().DamageEffect();
+                player.stats.DoDamage(hit.GetComponent<CharacterStats>());
 
                 if (canDuplicate)
                 {

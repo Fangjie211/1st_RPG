@@ -6,6 +6,8 @@ using UnityEngine;
 public class CharacterStats : MonoBehaviour
 {
 
+    private EntityFX fx;
+
     [Header("Major Stats")]
     public Stat strength;
     public Stat agility;
@@ -47,6 +49,7 @@ public class CharacterStats : MonoBehaviour
     protected virtual void Start()
     {
         currentHealth = GetMaxHealth();
+        fx= GetComponent<EntityFX>();
     }
     protected virtual void Update()
     {
@@ -137,16 +140,22 @@ public class CharacterStats : MonoBehaviour
         {
             isIgnited = _ignite;
             ignitedTimer = 4;
+            fx.IgniteFXFor(2);
         }
         if (_chill)
         {
             isChilled = _chill;
             chilledTimer = 4;
+
+            float slowPercentage = .2f;
+            GetComponent<Entity>().SlowEntityBy(slowPercentage, 4);
+            fx.ChillFXFor(4);
         }
         if (_shock)
         {
             isShocked = _shock;
             shockedTimer = 4; 
+            fx.ShockFXFor(2);
         }
     }
     public void DoDamage(CharacterStats _targetStats)

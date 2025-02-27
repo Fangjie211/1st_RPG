@@ -15,10 +15,14 @@ public class Player : Entity
     [Header("Move info")]
     public float moveSpeed;
     public float JumpForce;
+    private float defaultMoveSpeed;
+    private float defaultJumpForce;
     public float swordReturnImpact;
+
     [Header("Dash info")]
     public float dashSpeed;
     public float dashDuration;
+    private float defaultDashSpeed;
     public float dashDir { get; private set; }
     
 
@@ -77,13 +81,33 @@ public class Player : Entity
         Destroy(sword);
     }
 
+    public override void SlowEntityBy(float _slowPercentage, float _slowDuration)
+    {
+        moveSpeed = moveSpeed * (1 - _slowPercentage);
+        JumpForce=JumpForce*(1 - _slowPercentage);
+        dashSpeed=dashSpeed * (1 - _slowPercentage);
+        anim.speed=anim.speed*(1 - _slowPercentage);
 
- 
+        Invoke("ReturnDefaultSpeed", _slowDuration);
+    }
+    protected override void ReturnDefaultSpeed()
+    {
+        base.ReturnDefaultSpeed();
+        JumpForce = defaultJumpForce;
+        dashSpeed= defaultDashSpeed;
+        moveSpeed= defaultMoveSpeed;
+    }
+
     protected override void Start()
     {
         base.Start();
         skill = SkillManager.instance;
         stateMachine.Initialize(idleState);
+
+        defaultJumpForce = JumpForce;
+        defaultMoveSpeed = moveSpeed;
+        defaultDashSpeed = dashSpeed;
+
     }
    
     protected override void Update()

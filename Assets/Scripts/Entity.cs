@@ -61,6 +61,14 @@ public class Entity : MonoBehaviour
     {
 
     }
+    public virtual void SlowEntityBy(float _slowPercentage,float _slowDuration)
+    {
+
+    }
+    protected virtual void ReturnDefaultSpeed()
+    {
+        anim.speed = 1;
+    }
     #region Velocity
     public void ZeroVelocity() => SetVelocity(0, 0);
     public void SetVelocity(float _xVelocity, float _yVelocity)

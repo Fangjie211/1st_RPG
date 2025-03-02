@@ -7,17 +7,20 @@ public class ItemObject : MonoBehaviour
     [SerializeField] private ItemData itemData;
     private SpriteRenderer sr;
 
-    private void Start()
+
+
+    private void OnValidate()
     {
-        sr = GetComponent<SpriteRenderer>();
-        sr.sprite = itemData.icon;
+        GetComponent<SpriteRenderer>().sprite = itemData.icon;
+        gameObject.name="itemObject"+itemData.itemName;
     }
+    
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.GetComponent<Player>() != null)
         {
-            Debug.Log("Pick up" + itemData.itemName);
+            Inventory.instance.AddItem(itemData);
             Destroy(gameObject);
         }
 

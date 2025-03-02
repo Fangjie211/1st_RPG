@@ -45,6 +45,10 @@ public class Crystal_Skill_Controller : MonoBehaviour
         }
         if (canMove)
         {
+            if (closestEnemy == null)
+            {
+                return;
+            }
             transform.position = Vector2.MoveTowards(transform.position, closestEnemy.position, moveSpeed * Time.deltaTime);
         
             if(Vector2.Distance(transform.position, closestEnemy.position) < .1f)

@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Skill\SkillController\Sword_Skill_Controller.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerWallSlideState.cs" />
     <Compile Include="Assets\Scripts\Skill\Clone_Skill.cs" />
+    <Compile Include="Assets\Scripts\Item_Inventory\InventoryItem.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\SkeletonAnimationTrigger.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAimSwordState.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerDashState.cs" />
@@ -81,13 +82,13 @@
     <Compile Include="Assets\Scripts\Player\PlayerCounterAttackState.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerManager.cs" />
-    <Compile Include="Assets\Scripts\ItemObject.cs" />
-    <Compile Include="Assets\Scripts\ItemData.cs" />
     <Compile Include="Assets\Scripts\EntityFX.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerWallJumpState.cs" />
     <Compile Include="Assets\Scripts\Skill\Dash_Skill.cs" />
     <Compile Include="Assets\Scripts\Enemy\Enemy.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerGroundedState.cs" />
+    <Compile Include="Assets\Scripts\Item_Inventory\ItemData_Equipment.cs" />
+    <Compile Include="Assets\Scripts\Item_Inventory\ItemData.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\SkeletonStunnedState.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\SkeletonBattleState.cs" />
     <Compile Include="Assets\Scripts\Enemy\EnemyStateMachine.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Assets\Scripts\Skill\SkillController\Crystal_Skill_Controller.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerPrimaryAttack.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAnimationTriggers.cs" />
+    <Compile Include="Assets\Scripts\Item_Inventory\UI_ItemSlot.cs" />
     <Compile Include="Assets\Scripts\Enemy\Skeleton\SkeletonIdleState.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerIdleState.cs" />
     <Compile Include="Assets\Scripts\Stats\Stat.cs" />
@@ -109,10 +111,12 @@
     <Compile Include="Assets\Scripts\Player\PlayerStateMachine.cs" />
     <Compile Include="Assets\Scripts\ThunderStrikeController.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerBlackHoleState.cs" />
+    <Compile Include="Assets\Scripts\Item_Inventory\Inventory.cs" />
     <Compile Include="Assets\Scripts\Skill\Skill.cs" />
     <Compile Include="Assets\Scripts\ParallaxBackground.cs" />
     <Compile Include="Assets\Scripts\UI\HealthBarUI.cs" />
     <Compile Include="Assets\Scripts\Skill\Sword_Skill.cs" />
+    <Compile Include="Assets\Scripts\Item_Inventory\ItemObject.cs" />
     <Compile Include="Assets\Scripts\Skill\SkillController\BlackHole_Skill_Controller.cs" />
   </ItemGroup>
   <ItemGroup>

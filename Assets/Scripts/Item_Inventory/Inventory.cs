@@ -78,15 +78,17 @@ public class Inventory : MonoBehaviour
 
         equipment.Add(newItem);
         equipmentDic.Add(newEquip, newItem);
+        newEquip.AddModifiers();
         RemoveItem(item);
     }
 
-    private void UnEquipItem(ItemData_Equipment ItemTODelete)
+    public void UnEquipItem(ItemData_Equipment ItemTODelete)
     {
         if (equipmentDic.TryGetValue(ItemTODelete, out InventoryItem value))
         {
             equipment.Remove(value);
             equipmentDic.Remove(ItemTODelete);
+            ItemTODelete.RemoveModifiers();
         }
     }
 
@@ -188,6 +190,43 @@ public class Inventory : MonoBehaviour
             }
         }
         UpdateUISlot();
+    }
+
+    public bool CanCraft(ItemData_Equipment _itemToCraft,List<InventoryItem> _requireMaterials)
+    {
+
+        List<InventoryItem> materialsToRemove=new List<InventoryItem>();
+        for(int i=0;i<_requireMaterials.Count;i++)
+        {
+
+            if (stashDictionary.TryGetValue(_requireMaterials[i].data,out InventoryItem item))
+            {
+                //add
+
+                if (item.stackSize < _requireMaterials[i].stackSize)
+                {
+                    Debug.Log("not enough");
+                    return false;
+                }
+                else
+                {
+                    materialsToRemove.Add(item);
+                }
+            }
+            else
+            {
+                Debug.Log("not enough");
+                return false;
+            }
+        }
+
+        for(int i=0;i<materialsToRemove.Count;i++)
+        {
+            RemoveItem(materialsToRemove[i].data);
+        }
+        AddItem(_itemToCraft);
+        Debug.Log("Here is " + _itemToCraft.name);
+        return true;
     }
 
 }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class UI_EquipmentSlot : UI_ItemSlot
 {
@@ -10,5 +12,12 @@ public class UI_EquipmentSlot : UI_ItemSlot
     private void OnValidate()
     {
         gameObject.name="EquipmentSlot_"+equipmentType.ToString();
+    }
+    public override void OnPointerDown(PointerEventData eventData)
+    {
+        //unequip
+        Inventory.instance.UnEquipItem(item.data as ItemData_Equipment);
+        Inventory.instance.AddItem(item.data as ItemData_Equipment);
+        CleanUpSlot();
     }
 }

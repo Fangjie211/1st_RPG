@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemName: 
-  icon: {fileID: 21300000, guid: 0c3b37d44c2b6de4fa54742360c9eab5, type: 3}
+  icon: {fileID: 127570159, guid: be55291aae08d434db3da3b59db3ab4a, type: 3}
   itemType: 1
-  dropChance: 83.1
+  dropChance: 0
   equipmentType: 0
-  itemEffects: []
+  itemEffects:
+  - {fileID: 11400000, guid: 203af3b337527484bbd97ec98759a3bb, type: 2}
   strength: 0
   agility: 0
   intelligence: 0
@@ -29,12 +30,8 @@ MonoBehaviour:
   armor: 0
   evasion: 0
   magicResistance: 0
-  fireDamage: 0
-  iceDamage: 0
+  fireDamage: 12
+  iceDamage: 23
   lightningDamage: 0
-  craftMaterials:
-  - data: {fileID: 11400000, guid: 1d4ae6d437a88104092235ffdb1c176e, type: 2}
-    stackSize: 0
-  - data: {fileID: 11400000, guid: cbf591f8b9aa76f4898731e88463ef85, type: 2}
-    stackSize: 0
+  craftMaterials: []
   itemCooldown: 0

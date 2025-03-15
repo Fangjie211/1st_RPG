@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f83ef1759648bfc43bc8574dc063f61c, type: 3}
-  m_Name: Item_03
+  m_Name: poop
   m_EditorClassIdentifier: 
   itemName: poop
   icon: {fileID: 21300000, guid: dcbeae0a34186154e985e3bf61624164, type: 3}
   itemType: 0
+  dropChance: 81.8

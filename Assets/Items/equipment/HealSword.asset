@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ef7defbdbf140e419ce17edcb7f61ae, type: 3}
-  m_Name: 
+  m_Name: HealSword
   m_EditorClassIdentifier: 
-  itemName: 
-  icon: {fileID: 21300000, guid: 0c3b37d44c2b6de4fa54742360c9eab5, type: 3}
+  itemName: HealSword
+  icon: {fileID: -1944902997, guid: a9ca9a41598dd2e44b125928045c518f, type: 3}
   itemType: 1
-  dropChance: 83.1
+  dropChance: 0
   equipmentType: 0
-  itemEffects: []
+  itemEffects:
+  - {fileID: 11400000, guid: 2e9ce86d3d6d8c84a8a06524deaa2a28, type: 2}
   strength: 0
   agility: 0
   intelligence: 0
@@ -32,9 +33,5 @@ MonoBehaviour:
   fireDamage: 0
   iceDamage: 0
   lightningDamage: 0
-  craftMaterials:
-  - data: {fileID: 11400000, guid: 1d4ae6d437a88104092235ffdb1c176e, type: 2}
-    stackSize: 0
-  - data: {fileID: 11400000, guid: cbf591f8b9aa76f4898731e88463ef85, type: 2}
-    stackSize: 0
+  craftMaterials: []
   itemCooldown: 0

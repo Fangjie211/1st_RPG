@@ -17,6 +17,8 @@ public class ItemData_Equipment : ItemData
 {
     public EquipmentType equipmentType;
 
+    public ItemEffect[] itemEffects;
+
     [Header("Major Stats")]
     public int strength;
     public int agility;
@@ -42,6 +44,8 @@ public class ItemData_Equipment : ItemData
 
     [Header("Craft requirements")]
     public List<InventoryItem> craftMaterials;
+
+    public float itemCooldown;
     public void AddModifiers()
     {
         PlayerStats playerStats=PlayerManager.instance.player.GetComponent<PlayerStats>();
@@ -81,7 +85,43 @@ public class ItemData_Equipment : ItemData
         playerStats.lightningDamage.RemoveModifier(lightningDamage);
 
     }
+    public void ExecuteItemEffect(Transform _enemyPosition)
+    {
+        foreach(var item in itemEffects)
+        {
+            item.ExecuteEffect(_enemyPosition);
+        }
+    }
+    public override string GetDescription()
+    {
+        sb.Length = 0;
+        AddItemDescription(strength, "Strength");
+        AddItemDescription(agility, "Agility");
+        AddItemDescription(intelligence, "Intelligence");
+        AddItemDescription(vitality, "Vitality");
+        AddItemDescription(damage, "Damage");
+        AddItemDescription(critPower, "Crit Power");
+        AddItemDescription(critChance, "Crit Chance");
+        AddItemDescription(health, "Health");
+        AddItemDescription(armor, "Armor");
+        AddItemDescription(evasion, "Evasion");
+        AddItemDescription(magicResistance, "Magic Resistance");
+        AddItemDescription(fireDamage, "Fire Damage");
+        AddItemDescription(iceDamage, "Ice Damage");
+        AddItemDescription(lightningDamage, "Lightning Damage");
 
+        return sb.ToString();
+    }
 
-
+    private void AddItemDescription(int _value,string _name)
+    {
+        if(_value!=0)
+        {
+            if (sb.Length > 0)
+            {
+                sb.AppendLine();
+            }
+            sb.Append("+ "+_value+" "+_name);
+        }
+    }
 }

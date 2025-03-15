@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f83ef1759648bfc43bc8574dc063f61c, type: 3}
-  m_Name: DogHead
+  m_Script: {fileID: 11500000, guid: baeedf2eddaf4284581c59db42ce727f, type: 3}
+  m_Name: IceAndFireEffect
   m_EditorClassIdentifier: 
-  itemName: DogHead
-  icon: {fileID: 21300000, guid: 0e392b78ccbd73d439dcf677aa71c6d6, type: 3}
-  itemType: 0
-  dropChance: 44.1
+  iceAndFirePrefab: {fileID: 5959276134865935371, guid: d79c394eb0a7bfc4e924316c703b62a8, type: 3}
+  xVelocity: 16.37

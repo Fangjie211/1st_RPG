@@ -1,11 +1,29 @@
- 
+
+using System.Collections;
 using System.Data;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
-
+public enum StatType
+{
+    strength,
+    agility,
+    intelligence,
+    vitality,
+    damage,
+    critChance,
+    critPower,
+    health,
+    armor,
+    evasion,
+    magicRes,
+    fireDamage,
+    iceDamage,
+    lightningDamage
+}
 public class CharacterStats : MonoBehaviour
 {
-
+    
     private EntityFX fx;
 
     [Header("Major Stats")]
@@ -39,7 +57,7 @@ public class CharacterStats : MonoBehaviour
     private int igniteDamage;
 
 
-    protected bool isDead;
+    public bool isDead { get; private set; }
     private int shockDamage;
     [SerializeField] private GameObject ShockPrefab;
     [Header("Offensive Stats")]
@@ -306,6 +324,18 @@ public class CharacterStats : MonoBehaviour
             Die();
         }
     }
+    public virtual void IncreaseHealthBy(int _amount)
+    {
+        currentHealth +=_amount;
+        if (currentHealth > GetMaxHealth())
+        {
+            currentHealth = GetMaxHealth();
+        }
+        if (OnHealthChanged != null)
+        {
+            OnHealthChanged();
+        }
+    }
     protected virtual void DecreaseHealthBy(int _damage)
     {
         currentHealth-= _damage;
@@ -314,7 +344,37 @@ public class CharacterStats : MonoBehaviour
             OnHealthChanged();
         }
     }
-
+    public virtual void IncreaseStatBy(int _modifier,float _duration,Stat _statToModifier)
+    {
+        StartCoroutine(StatModCoroutine(_modifier, _duration, _statToModifier));
+    }
+    private IEnumerator StatModCoroutine(int _modifier, float _duration, Stat _statToModifier)
+    {
+        _statToModifier.AddModifier(_modifier);
+        yield return new WaitForSeconds(_duration);
+        _statToModifier.RemoveModifier(_modifier);
+    }
+    public Stat StatOfType(StatType buffType)
+    {
+        switch (buffType)
+        {
+            case StatType.strength: return strength;
+            case StatType.agility: return agility;
+            case StatType.intelligence: return intelligence;
+            case StatType.vitality: return vitality;
+            case StatType.damage: return damage;
+            case StatType.critChance: return critChance;
+            case StatType.critPower: return critPower;
+            case StatType.health: return    maxHp;
+            case StatType.armor: return armor;
+            case StatType.evasion: return evasion;
+            case StatType.magicRes: return magicResistance;
+            case StatType.fireDamage: return fireDamage;
+            case StatType.iceDamage: return iceDamage;
+            case StatType.lightningDamage: return lightningDamage;
+            default: return null;
+        }
+    }
     protected virtual void Die()
     {
         isDead = true;

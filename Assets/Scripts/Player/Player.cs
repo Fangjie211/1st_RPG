@@ -121,6 +121,10 @@ public class Player : Entity
         {
             SkillManager.instance.crystal.CanUseSkill();
         }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Inventory.instance.UseFlask();
+        }
     }
     public void AnimationTrigger() => stateMachine.currentState.AnimationFinishTrigger();
     private void CheckForDashInput()

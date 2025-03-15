@@ -73,7 +73,8 @@ public class Enemy : Entity
             anim.speed = 1;
         }
     }
-    protected virtual IEnumerator FreezeTimeFor(float _seconds)
+    public virtual void FreezeTimeFor(float _seconds) => StartCoroutine(FreezeTimeCoroutine(_seconds));
+    protected virtual IEnumerator FreezeTimeCoroutine(float _seconds)
     {
         FreezeTime(true);
         yield return new WaitForSeconds(_seconds);

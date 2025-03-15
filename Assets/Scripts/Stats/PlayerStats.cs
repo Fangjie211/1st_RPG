@@ -1,3 +1,6 @@
+
+using UnityEngine;
+
 public class PlayerStats : CharacterStats
 {
 
@@ -10,10 +13,24 @@ public class PlayerStats : CharacterStats
     public override void TakeDamage(int _damage)
     {
         base.TakeDamage(_damage);
+        Debug.Log(_damage);
     }
     protected override void Die()
     {
+        
         base.Die();
         player.Die();
+
+        GetComponent<PlayerItemDrop>()?.GenerateDrop();
+    }
+    protected override void DecreaseHealthBy(int _damage)
+    {
+        base.DecreaseHealthBy(_damage);
+        ItemData_Equipment currentArmor = Inventory.instance.GetEquipment(EquipmentType.Armor);
+        if (currentArmor != null)
+        {
+            Debug.Log("Armor effect");
+            currentArmor.ExecuteItemEffect(player.transform);
+        }
     }
 }

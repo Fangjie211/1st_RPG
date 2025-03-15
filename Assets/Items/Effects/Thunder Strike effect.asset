@@ -9,10 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f83ef1759648bfc43bc8574dc063f61c, type: 3}
-  m_Name: DogHead
+  m_Script: {fileID: 11500000, guid: 76ea187d76a93b548a4d254779095b3c, type: 3}
+  m_Name: Thunder Strike effect
   m_EditorClassIdentifier: 
-  itemName: DogHead
-  icon: {fileID: 21300000, guid: 0e392b78ccbd73d439dcf677aa71c6d6, type: 3}
-  itemType: 0
-  dropChance: 44.1
+  thunderStrikePrefab: {fileID: 9103028154831625632, guid: 752baa2b6932fef44bf936738d573d55, type: 3}

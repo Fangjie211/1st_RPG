@@ -1,5 +1,7 @@
 using System;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public enum SwordType
@@ -15,20 +17,26 @@ public class Sword_Skill : Skill
     public SwordType swordType=SwordType.Regular;
     [SerializeField] private float returnSpeed;
     [Header("Bounce info")]
+
+    [SerializeField] private UI_SkillTreeSlot bounceUnlockButton;
     [SerializeField] private int bounceAmount;
     [SerializeField]private float bounceGravity;
     [SerializeField] private float bounceSpeed;
 
     [Header("Pierce info")]
+    [SerializeField] private UI_SkillTreeSlot pierceUnlockButton;
     [SerializeField] private int pierceAmount;
     [SerializeField] private float pierceGravity;
 
     [Header("Skill info")]
+    [SerializeField] private UI_SkillTreeSlot swordUnlockButton;
+    public bool swordUnlocked {  get; private set; }
     [SerializeField] private GameObject swordPrefab;
     [SerializeField] private Vector2 launchDir;
     [SerializeField] private float swordGravity;
 
     [Header("Spin info")]
+    [SerializeField]private UI_SkillTreeSlot spinUnlockButton;
     [SerializeField] private float maxTravelDistance;
     [SerializeField] private float spinDuration;
     [SerializeField] private float spinGravity;
@@ -36,6 +44,14 @@ public class Sword_Skill : Skill
 
     private Vector2 finalDir;
     [SerializeField] private float freezeTimeDuration;
+    
+    [Header("Passive info")]
+    [SerializeField] private UI_SkillTreeSlot timeStopUnlockButton;
+    public  bool timeStopUnlocked { get;private set; }
+    [SerializeField] private UI_SkillTreeSlot vulnerableUnlockButton;
+    public bool vulnerableUnlocked { get; private set; }
+
+
     [Header("Aim dots")]
     [SerializeField] private int numberOfDots;
     [SerializeField] private float spaceBetweenDots;
@@ -48,7 +64,77 @@ public class Sword_Skill : Skill
         base.Start();
         GenerateDots();
         SetupGravity();
+
+        swordUnlockButton.GetComponent<Button>().onClick.AddListener(UnlockSword);
+        spinUnlockButton.GetComponent<Button>().onClick.AddListener(UnlockSpinSword);
+        bounceUnlockButton.GetComponent<Button>().onClick.AddListener(UnlockBounceSword);
+        pierceUnlockButton.GetComponent<Button>().onClick.AddListener(UnlockPierceSword);
+        timeStopUnlockButton.GetComponent<Button>().onClick.AddListener(UnlockTimeStop);
+        vulnerableUnlockButton.GetComponent<Button>().onClick.AddListener(UnlockVulnerable);
     }
+
+
+    #region Unlock region
+
+    protected override void CheckUnlock()
+    {
+        base.CheckUnlock();
+        UnlockBounceSword();
+        UnlockTimeStop();
+        UnlockPierceSword();
+        UnlockSpinSword();
+        UnlockSword();
+        UnlockVulnerable();
+        
+    }
+    private void UnlockTimeStop()
+    {
+        if(timeStopUnlockButton.unlocked)
+        {
+            timeStopUnlocked = true;
+        }
+    }
+    
+    private void UnlockVulnerable()
+    {
+        if (vulnerableUnlockButton.unlocked)
+        {
+            vulnerableUnlocked = true;
+        }
+    }
+
+    private void UnlockSword()
+    {
+        if(swordUnlockButton.unlocked)
+        {
+            swordUnlocked = true;
+            swordType = SwordType.Regular;
+        }
+    }
+
+    private void UnlockBounceSword()
+    {
+        if (bounceUnlockButton.unlocked)
+        {
+            swordType = SwordType.Bounce;
+        }
+    }
+
+    private void UnlockSpinSword()
+    {
+        if (spinUnlockButton.unlocked)
+        {
+            swordType = SwordType.Spin;
+        }
+    }
+    private void UnlockPierceSword()
+    {
+        if (pierceUnlockButton.unlocked)
+        {
+            swordType= SwordType.Pierce;
+        }
+    }
+    #endregion
 
     private void SetupGravity()
     {

@@ -17,6 +17,7 @@ MonoBehaviour:
   itemType: 1
   dropChance: 52.8
   equipmentType: 0
+  uniqueDescription: 
   itemEffects: []
   strength: 0
   agility: 0

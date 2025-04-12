@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+public class Inventory : MonoBehaviour,ISavemanager
 {
     public static Inventory instance;
 
@@ -28,6 +29,10 @@ public class Inventory : MonoBehaviour
     private UI_ItemSlot[] stashSlots;
     private UI_EquipmentSlot[] equipSlots;
     private UI_StatSlot[] statSlots;
+
+    [Header("Data base")]
+    public List<InventoryItem> loadedItems;
+    public List<ItemData_Equipment> loadedEquip;
 
     [Header("Items cooldown")]
     private float lastTimeUsedFlask;
@@ -93,10 +98,29 @@ public class Inventory : MonoBehaviour
 
     private void AddStartItems()
     {
-        for (int i = 0; i < startItems.Count; i++)
+        foreach(ItemData_Equipment item in loadedEquip)
         {
-            AddItem(startItems[i]);
+            EquipItem(item);
         }
+        if (loadedItems.Count > 0)
+        {
+            foreach(InventoryItem item in loadedItems)
+            {
+                for(int i = 0; i < item.stackSize; i++)
+                {
+                    AddItem(item.data);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < startItems.Count; i++)
+            {
+                AddItem(startItems[i]);
+            }
+        }
+        return;
+
     }
 
     public void EquipItem(ItemData item)
@@ -164,11 +188,17 @@ public class Inventory : MonoBehaviour
         {
             stashSlots[i].UpdateSlot(stashItems[i]);
         }
-        for(int i = 0; i < statSlots.Length; i++)
+        UpdateStatsUI();
+    }
+
+    public void UpdateStatsUI()
+    {
+        for (int i = 0; i < statSlots.Length; i++)
         {
             statSlots[i].UpdateStatValueUI();
         }
     }
+
     public void AddItem(ItemData _item)
     {
         if (_item.itemType == ItemType.Equipment&&CanAddItem())
@@ -303,4 +333,66 @@ public class Inventory : MonoBehaviour
     public List<InventoryItem> GetEquipmentList() => equipment;
 
     public List<InventoryItem> GetStashList() => stashItems;
+
+    public void LoadData(GameData _data)
+    {
+
+        foreach (KeyValuePair<string, int> pair in _data.inventory)
+        {
+
+            foreach (var item in GetItemDataBase())
+            {
+                if (item != null && item.itemID == pair.Key)
+                {
+                    InventoryItem itemTOload = new InventoryItem(item);
+                    itemTOload.stackSize = pair.Value;
+                    loadedItems.Add(itemTOload);
+                }
+            }
+        }
+        foreach(string itemID in _data.equip)
+        {
+            foreach(var item in GetItemDataBase())
+            {
+                if(item!=null && itemID == item.itemID)
+                {
+                    loadedEquip.Add(item as ItemData_Equipment);
+                }
+            }
+        }
+    }
+
+
+    public void SaveData(ref GameData _data)
+    {
+        _data.inventory.Clear();
+        _data.equip.Clear();
+
+
+        foreach(KeyValuePair<ItemData,InventoryItem> pair in EquipDictionary)
+        {
+            _data.inventory.Add(pair.Key.itemID, pair.Value.stackSize);
+        }
+        foreach(KeyValuePair<ItemData,InventoryItem> pair in stashDictionary)
+        {
+            _data.inventory.Add(pair.Key.itemID, pair.Value.stackSize);
+        }
+        foreach(KeyValuePair<ItemData_Equipment,InventoryItem> pair in equipmentDic)
+        {
+            _data.equip.Add(pair.Key.itemID);
+        }
+    }
+
+    private List<ItemData> GetItemDataBase()
+    {
+        List<ItemData> itemDataBase=new List<ItemData>();
+        string[] assetNames = AssetDatabase.FindAssets("", new[] { "Assets/items" });
+        foreach (string assetName in assetNames)
+        {
+            var SOpath = AssetDatabase.GUIDToAssetPath(assetName);
+            var itemData = AssetDatabase.LoadAssetAtPath<ItemData>(SOpath);
+            itemDataBase.Add(itemData);
+        }
+        return itemDataBase;
+    }
 }

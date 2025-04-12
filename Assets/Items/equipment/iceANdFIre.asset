@@ -17,6 +17,7 @@ MonoBehaviour:
   itemType: 1
   dropChance: 0
   equipmentType: 0
+  uniqueDescription: 
   itemEffects:
   - {fileID: 11400000, guid: 203af3b337527484bbd97ec98759a3bb, type: 2}
   strength: 0

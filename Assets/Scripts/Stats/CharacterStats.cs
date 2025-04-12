@@ -58,6 +58,7 @@ public class CharacterStats : MonoBehaviour
 
 
     public bool isDead { get; private set; }
+    public bool isVulnerable { get; private set; }
     private int shockDamage;
     [SerializeField] private GameObject ShockPrefab;
     [Header("Offensive Stats")]
@@ -271,7 +272,7 @@ public class CharacterStats : MonoBehaviour
         DoMagicDamage(_targetStats);
     }
 
-    private int CheckTargetArmor(CharacterStats _targetStats, int totalDamage)
+    protected int CheckTargetArmor(CharacterStats _targetStats, int totalDamage)
     {
 
         if (_targetStats.isChilled)
@@ -286,7 +287,22 @@ public class CharacterStats : MonoBehaviour
         return totalDamage;
     }
 
-    private bool TargetCanEvade(CharacterStats _targetStats)
+    private IEnumerator VulnerableCoroutine(float _duration)
+    {
+        isVulnerable = true;
+        yield return new WaitForSeconds(_duration);
+        isVulnerable = false;
+    }
+
+    public void MakeVulnerableFor(float _duration)
+    {
+        StartCoroutine(VulnerableCoroutine( _duration));
+    }
+    public virtual void OnEvasion()
+    {
+
+    }
+    protected bool TargetCanEvade(CharacterStats _targetStats)
     {
         int totalEvasion = _targetStats.evasion.GetValue();
         if (isShocked)
@@ -295,11 +311,12 @@ public class CharacterStats : MonoBehaviour
         }
         if (Random.Range(0, 100) < totalEvasion)
         {
+            _targetStats.OnEvasion();
             return true;
         }
         return false;
     }
-    private bool CanCrit()
+    protected bool CanCrit()
     {
         int totalCriticalChance =critChance.GetValue();
         if(Random.Range(0, 100) <= totalCriticalChance + agility.GetValue())
@@ -308,7 +325,7 @@ public class CharacterStats : MonoBehaviour
         }
         return false;
     }
-    private int CalculateCritialDamage(int _damage)
+    protected int CalculateCritialDamage(int _damage)
     {
         float totalCritPower=(critPower.GetValue()+strength.GetValue())*.01f;
         float critDamage = _damage + totalCritPower;
@@ -338,6 +355,10 @@ public class CharacterStats : MonoBehaviour
     }
     protected virtual void DecreaseHealthBy(int _damage)
     {
+        if (isVulnerable)
+        {
+            _damage = Mathf.RoundToInt(_damage*1.5f);
+        }
         currentHealth-= _damage;
         if(OnHealthChanged != null)
         {

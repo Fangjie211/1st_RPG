@@ -9,6 +9,7 @@ public class Clone_Skill_Controller : MonoBehaviour
     private SpriteRenderer sr;
     private Animator anim;
     float colorLosingSpeed;
+    private float attackMultiplier;
     private float cloneTimer;
     private bool canDuplicate;
     private int facingDir = 1;
@@ -35,7 +36,7 @@ public class Clone_Skill_Controller : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void SetupClone(Transform _newTransform, float _cloneDuration, float _colorLosingSpeed, bool _canAttack, Vector3 _offset, Transform _closestEnemy,bool _canDuplicate,float _chanceToDuplicate,int _OriginFacingDir,Player _player)
+    public void SetupClone(Transform _newTransform, float _cloneDuration, float _colorLosingSpeed, bool _canAttack, Vector3 _offset, Transform _closestEnemy,bool _canDuplicate,float _chanceToDuplicate,int _OriginFacingDir,Player _player,float _multiplier)
     {
         if (_canAttack)
         {
@@ -49,6 +50,7 @@ public class Clone_Skill_Controller : MonoBehaviour
         FaceClosestTarget(_OriginFacingDir);
         canDuplicate = _canDuplicate;
         chanceToDuplicate = _chanceToDuplicate;
+        attackMultiplier=_multiplier;
     }
 
     private void AnimationTrigger()
@@ -61,8 +63,17 @@ public class Clone_Skill_Controller : MonoBehaviour
         foreach (var hit in colliders)
         {
             if (hit.GetComponent<Enemy>() != null){
-                player.stats.DoDamage(hit.GetComponent<CharacterStats>());
+                //player.stats.DoDamage(hit.GetComponent<CharacterStats>());
+                player.GetComponent<PlayerStats>().CloneDoDamage(hit.GetComponent<EnemyStats>(), attackMultiplier);
 
+                if (player.skill.clone.canApplyOnHitEffect)
+                {
+                    ItemData_Equipment weapon = Inventory.instance.GetEquipment(EquipmentType.Weapon);
+                    if(weapon != null)
+                    {
+                        weapon.ExecuteItemEffect(hit.transform);
+                    }
+                }
                 if (canDuplicate)
                 {
                     if (Random.Range(0, 100) < chanceToDuplicate)

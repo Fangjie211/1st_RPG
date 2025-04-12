@@ -16,7 +16,9 @@ public enum EquipmentType
 public class ItemData_Equipment : ItemData
 {
     public EquipmentType equipmentType;
-
+    [Header("Unique Stats")]
+    [TextArea]
+    public string uniqueDescription;
     public ItemEffect[] itemEffects;
 
     [Header("Major Stats")]
@@ -41,7 +43,7 @@ public class ItemData_Equipment : ItemData
     public int iceDamage;
     public int lightningDamage;
 
-
+    
     [Header("Craft requirements")]
     public List<InventoryItem> craftMaterials;
 
@@ -109,7 +111,11 @@ public class ItemData_Equipment : ItemData
         AddItemDescription(fireDamage, "Fire Damage");
         AddItemDescription(iceDamage, "Ice Damage");
         AddItemDescription(lightningDamage, "Lightning Damage");
-
+        if(uniqueDescription.Length > 0)
+        {
+            sb.AppendLine();
+            sb.Append(uniqueDescription);
+        }
         return sb.ToString();
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 public enum ItemType
 {
@@ -16,9 +17,13 @@ public class ItemData : ScriptableObject
     public ItemType itemType;
     [Range(0,100)]
     public float dropChance;
+    public string itemID;
     private void OnValidate()
     {
-        this.name = itemName;
+#if UNITY_EDITOR
+        string path = AssetDatabase.GetAssetPath(this);
+        itemID=AssetDatabase.AssetPathToGUID(path);
+#endif
     }
     protected StringBuilder sb=new StringBuilder();
 
